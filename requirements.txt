@@ -1,3 +1,4 @@
+cython
 numpy>=1.15.0
 spacy==2.3.4
 requests>=2.18.4
