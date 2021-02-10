@@ -5,7 +5,8 @@ from ucca.layer1 import EdgeTags as ETags, NodeTags as L1Tags
 NO_MULTIPLE_INCOMING_CATEGORIES = {ETags.Function, ETags.ParallelScene, ETags.Linker, ETags.LinkRelation,
                                    ETags.Connector, ETags.Punctuation, ETags.Terminal}
 TOP_CATEGORIES = {ETags.ParallelScene, ETags.Linker, ETags.Function, ETags.Ground, ETags.Punctuation,
-                  ETags.LinkRelation, ETags.LinkArgument, ETags.Connector}
+                  ETags.Relator, ETags.LinkRelation, ETags.LinkArgument, ETags.Connector}
+KEEP_OUTSIDE_CMR = {ETags.Relator}
 COORDINATED_MAIN_REL = "Coordinated_Main_Rel."
 
 
@@ -288,7 +289,9 @@ def split_coordinated_main_rel(node, l1):
                     if scene_edge.ID != edge.ID and not (
                             scenes and NO_MULTIPLE_INCOMING_CATEGORIES.intersection(scene_edge.tags)):
                         # Not the CMR edge itself, and not a category that does not allow multiple parents
-                        copy_edge(scene_edge, parent=new_scene, attrib={"remote": True} if scenes else None)
+                        copy_edge(scene_edge,
+                                  parent=top if KEEP_OUTSIDE_CMR.intersection(scene_edge.tags) else new_scene,
+                                  attrib={"remote": True} if scenes else None)
                 scenes.append(new_scene)
             for main_rel_edge in main_rel_non_centers:
                 tags = main_rel_edge.tags
