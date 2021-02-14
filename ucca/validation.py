@@ -162,12 +162,18 @@ class NodeValidator:
             yield "%s unit with %s siblings: under %s" % (join(edges_to_check), join(s), self.node)
         forbidden = set.union(SCENE, ETags.ParallelScene, ETags.Linker, ETags.Ground, ETags.Connector)
         s = forbidden.intersection(self.outgoing_tags)
+        if 'D' in s:
+            s.remove('D')
         if (ETags.Elaborator in self.outgoing_tags) and s:
             yield "%s unit with %s siblings: under %s" % (ETags.Elaborator, join(s), self.node)
         forbidden = set.union(SCENE, ETags.ParallelScene, ETags.Linker, ETags.Ground)
         s = forbidden.intersection(self.outgoing_tags)
+        if 'D' in s:
+            s.remove('D')
         if (ETags.Quantifier in self.outgoing_tags) and s:
             yield "%s unit with %s siblings: under %s" % (ETags.Quantifier, join(s), self.node)
+        if (any(self.outgoing_tags.intersection({ETags.Quantifier, ETags.Elaborator}))) and (ETags.Adverbial in self.outgoing_tags):
+            warning("Adverbial with Quantifier and/or Elaborator under $s" % (self.node))
         forbidden = set.union(SCENE, ETags.ParallelScene, ETags.Linker, ETags.Ground, ETags.Elaborator,
                               ETags.Quantifier)
         s = forbidden.intersection(self.outgoing_tags)
@@ -204,7 +210,6 @@ class NodeValidator:
              e.attrib.get('remote') and e.tag == ETags.Relator]
         if (ETags.Relator in self.incoming_tags) and s:
             warning("Relator remote edges (%s)" % (join(s)))
-
         s = self.outgoing_tags.difference(set.union({ETags.ParallelScene, ETags.Linker, ETags.Function,
                                                      ETags.Punctuation}, LINKAGE))
         if (not self.incoming) and s:
