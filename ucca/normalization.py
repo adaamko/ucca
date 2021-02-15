@@ -281,17 +281,19 @@ def split_coordinated_main_rel(node, l1):
             else:
                 top = node
             outgoing = list(node.outgoing)
+            external = [e for e in outgoing if KEEP_OUTSIDE_CMR.intersection(e.tags)]
+            internal = [e for e in outgoing if not KEEP_OUTSIDE_CMR.intersection(e.tags) and
+                        e.ID != edge.ID]  # Not the CMR edge itself
+            for scene_edge in external:  # A category that should be kept outside of both scenes
+                copy_edge(scene_edge, parent=top)
             scenes = []
             for center in centers:
                 new_scene = l1.add_fnode(top, ETags.ParallelScene)
                 copy_edge(edge, parent=new_scene, child=center, attrib=attrib)
-                for scene_edge in outgoing:
-                    if scene_edge.ID != edge.ID and not (
-                            scenes and NO_MULTIPLE_INCOMING_CATEGORIES.intersection(scene_edge.tags)):
-                        # Not the CMR edge itself, and not a category that does not allow multiple parents
-                        copy_edge(scene_edge,
-                                  parent=top if KEEP_OUTSIDE_CMR.intersection(scene_edge.tags) else new_scene,
-                                  attrib={"remote": True} if scenes else None)
+                for scene_edge in internal:
+                    if not (scenes and NO_MULTIPLE_INCOMING_CATEGORIES.intersection(scene_edge.tags)):
+                        # Attach inside the 1st scene and potentially also as remote in 2nd scene
+                        copy_edge(scene_edge, parent=new_scene, attrib={"remote": True} if scenes else None)
                 scenes.append(new_scene)
             for main_rel_edge in main_rel_non_centers:
                 tags = main_rel_edge.tags

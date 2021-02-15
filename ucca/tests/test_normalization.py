@@ -350,7 +350,7 @@ def expanded_remote_cmr():
     return p
 
 
-def cmr_with_relator():
+def cmr_with_relator_outside():
     """
     [suitable_S [for_R the_F [breeding_C and_N growing_C]_P|CMR [of_R giants_C]_A]_A]_H
     """
@@ -361,14 +361,14 @@ def cmr_with_relator():
     r1 = l1.add_fnode(a_scene, layer1.EdgeTags.Relator)
     f = l1.add_fnode(a_scene, layer1.EdgeTags.Function)
     p1, c1, n, c2 = insert_cmr(l1, a_scene)
-    a2 = l1.add_fnode(ps, layer1.EdgeTags.Participant)
+    a2 = l1.add_fnode(a_scene, layer1.EdgeTags.Participant)
     r2 = l1.add_fnode(a2, layer1.EdgeTags.Relator)
     c3 = l1.add_fnode(a2, layer1.EdgeTags.Center)
     attach_terminals(terms, s, r1, f, c1, n, c2, r2, c3)
     return p
 
 
-def expanded_cmr_with_relator():
+def expanded_cmr_with_relator_outside():
     """
     [suitable_S [for_R [[the_F breeding_C]_P [of_R giants_C]_A]_H and_L [[growing_P] [*of giants]_A]_H]_H
     """
@@ -381,14 +381,13 @@ def expanded_cmr_with_relator():
     linker = l1.add_fnode(a_superscene, layer1.EdgeTags.Linker)
     ps3 = l1.add_fnode(a_superscene, layer1.EdgeTags.ParallelScene)
     p1 = l1.add_fnode(ps2, layer1.EdgeTags.Process)
-    f = l1.add_fnode(p1, layer1.EdgeTags.Function)
-    c1 = l1.add_fnode(p1, layer1.EdgeTags.Center)
+    f = l1.add_fnode(ps2, layer1.EdgeTags.Function)
     a = l1.add_fnode(ps2, layer1.EdgeTags.Participant)
     r2 = l1.add_fnode(a, layer1.EdgeTags.Relator)
     c2 = l1.add_fnode(a, layer1.EdgeTags.Center)
     p2 = l1.add_fnode(ps3, layer1.EdgeTags.Process)
     l1.add_remote(ps3, layer1.EdgeTags.Participant, a)
-    attach_terminals(terms, s, r1, f, c1, linker, p2, r2, c2)
+    attach_terminals(terms, s, r1, f, p1, linker, p2, r2, c2)
     return p
 
 
@@ -423,7 +422,7 @@ def normalize_and_compare(unnormalized, normalized, extra=False):
         (cmr_no_attrib, cmr_no_attrib),
         (cmr, expanded_cmr),
         (remote_cmr, expanded_remote_cmr),
-        (cmr_with_relator, expanded_cmr_with_relator),
+        (cmr_with_relator_outside, expanded_cmr_with_relator_outside),
 ))
 def test_normalize(unnormalized, normalized):
     normalize_and_compare(unnormalized, normalized)
