@@ -248,7 +248,7 @@ def flatten_functions(node):
 def flatten_participants(node):
     """
     Whenever there is an A as an only child, remove it.
-    If there is an implicit A in a scene without a main relation, remove it.
+    If there is an implicit A in a unit without a main relation, remove it.
     """
     if node.tag == L1Tags.Foundational:
         participants = node.participants
@@ -260,6 +260,19 @@ def flatten_participants(node):
             for child in participants:
                 if child.attrib.get("implicit"):
                     destroy(child)
+    return node
+
+
+def flatten_scenes(node):
+    """
+    Whenever there is an H with H inside, remove the top one
+    """
+    if node.tag == L1Tags.Foundational:
+        for ps in node.parallel_scenes:
+            if ps.parallel_scenes:
+                for edge in ps.outgoing:
+                    copy_edge(edge, parent=node)
+                    destroy(edge)
     return node
 
 
@@ -326,7 +339,10 @@ def normalize_node(node, l1, extra):
         node = flatten_functions(node)
         if node is None:
             return
-        flatten_participants(node)
+        node = flatten_participants(node)
+        if node is None:
+            return
+        flatten_scenes(node)
 
 
 def normalize(passage, extra=False):

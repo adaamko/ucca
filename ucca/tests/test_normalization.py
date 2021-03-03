@@ -81,6 +81,36 @@ def unary_function():
     return p
 
 
+def unary_participant():
+    """
+    Whenever there is an A as an only child, remove it.
+    """
+    p, l1, terms = create_passage()
+    ps1 = l1.add_fnode(None, layer1.EdgeTags.ParallelScene)
+    a = l1.add_fnode(ps1, layer1.EdgeTags.Participant)
+    ps2 = l1.add_fnode(a, layer1.EdgeTags.ParallelScene)
+    p1 = l1.add_fnode(ps2, layer1.EdgeTags.Process)
+    linker = l1.add_fnode(a, layer1.EdgeTags.Linker)
+    ps3 = l1.add_fnode(a, layer1.EdgeTags.ParallelScene)
+    p2 = l1.add_fnode(ps3, layer1.EdgeTags.Process)
+    attach_terminals(terms, p1, linker, p2)
+    return p
+
+
+def simple_linkage():
+    """
+    Whenever there is an A as an only child, remove it.
+    """
+    p, l1, terms = create_passage()
+    ps1 = l1.add_fnode(None, layer1.EdgeTags.ParallelScene)
+    p1 = l1.add_fnode(ps1, layer1.EdgeTags.Process)
+    linker = l1.add_fnode(None, layer1.EdgeTags.Linker)
+    ps2 = l1.add_fnode(None, layer1.EdgeTags.ParallelScene)
+    p2 = l1.add_fnode(ps2, layer1.EdgeTags.Process)
+    attach_terminals(terms, p1, linker, p2)
+    return p
+
+
 def simple_function():
     p, l1, terms = create_passage()
     ps1 = l1.add_fnode(None, layer1.EdgeTags.ParallelScene)
@@ -423,6 +453,7 @@ def normalize_and_compare(unnormalized, normalized, extra=False):
         (cmr, expanded_cmr),
         (remote_cmr, expanded_remote_cmr),
         (cmr_with_relator_outside, expanded_cmr_with_relator_outside),
+        (unary_participant, simple_linkage),
 ))
 def test_normalize(unnormalized, normalized):
     normalize_and_compare(unnormalized, normalized)
