@@ -299,9 +299,9 @@ def test_evaluate_self(create, units, errors, normalize):
 
 
 @pytest.mark.parametrize("create1, create2, f1", (
-                                 (passage1, passage2, {(LABELED, PRIMARY): 0.5, (LABELED, REMOTE): 0.4, (LABELED, IMPLICIT): 1,
-                                                       (UNLABELED, PRIMARY): 0.75, (UNLABELED, REMOTE): 0.8, (UNLABELED, IMPLICIT): 1,
-                                                       (WEAK_LABELED, PRIMARY): 7/12, (WEAK_LABELED, REMOTE): 0.8, (WEAK_LABELED, IMPLICIT): 1}),
+                                 (passage1, passage2, {(LABELED, PRIMARY): 6/11, (LABELED, REMOTE): 0.4, (LABELED, IMPLICIT): 1,
+                                                       (UNLABELED, PRIMARY): 9/11, (UNLABELED, REMOTE): 0.8, (UNLABELED, IMPLICIT): 1,
+                                                       (WEAK_LABELED, PRIMARY): 7/11, (WEAK_LABELED, REMOTE): 0.8, (WEAK_LABELED, IMPLICIT): 1}),
                                  (simple1, simple2, {(LABELED, PRIMARY): 0.6, (LABELED, REMOTE): 0, (LABELED, IMPLICIT): 0,
                                                      (UNLABELED, PRIMARY): 1, (UNLABELED, REMOTE): 1, (UNLABELED, IMPLICIT): 0,
                                                      (WEAK_LABELED, PRIMARY): 0.8, (WEAK_LABELED, REMOTE): 0, (WEAK_LABELED, IMPLICIT): 0}),

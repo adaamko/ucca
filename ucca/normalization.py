@@ -269,7 +269,7 @@ def flatten_scenes(node):
     """
     if node.tag == L1Tags.Foundational:
         for ps in node.parallel_scenes:
-            if ps.parallel_scenes:
+            if ps and all(TOP_CATEGORIES.intersection(edge.tags) for edge in ps.outgoing):
                 for edge in ps.outgoing:
                     copy_edge(edge, parent=node)
                     destroy(edge)
