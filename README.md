@@ -26,8 +26,8 @@ To parse text to UCCA graphs, use [TUPA, the UCCA parser](https://github.com/dan
 
 Authors
 ------
-* Amit Beka: amit.beka@gmail.com
-* Daniel Hershcovich: daniel.hershcovich@gmail.com
+* Amit Beka
+* Daniel Hershcovich: dh@di.ku.dk 
 
 
 License
